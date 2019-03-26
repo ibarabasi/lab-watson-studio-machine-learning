@@ -17,11 +17,11 @@ When the reader has completed this Code Pattern, they will understand how to:
 ## Flow
 
 1. The developer creates an IBM Watson Studio Workspace.
-2. IBM Watson Studio depends on an Apache Spark service.
+2. Using an Apache Spark runtime for the Jupyter Notebook Kernel
 3. IBM Watson Studio uses Cloud Object storage to manage your data.
 4. This lab is built around a Jupyter Notebook, this is where the developer will import data, train, and evaluate their model.
 5. Import data on heart failure.
-6. Trained models are deployed into production using IBM's Watson Machine Learning Service.
+6. Trained models are deployed as a web service using IBM's Watson Machine Learning Service.
 7. A Node.js web app is deployed on IBM Cloud calling the predictive model hosted in the Watson Machine Learning Service.
 8. A user visits the web app, enters their information, and the predictive model returns a response.
 
@@ -197,18 +197,24 @@ Machine Learning is a service on IBM Cloud with features for training and deploy
 The Watson Machine Learning service is now listed as one of your `Associated Services`.
 
 ## 5. Save credentials for Watson Machine Learning Service
-# UPDATE SECTION AND IMAGES
+# PICTURES NEED UPDATED HERE
+
 To access the Watson Machine Learning service from SDKs and within Jupyter Notebooks the credentials are necessary.  Copy down the credentials from the newly created service for use in Python later in the lab.
 
+1. Obtain Watson Machine Learning Credentials needed for invoking APIs. The Watson Machine Learning service was created and runs on IBM Cloud. To get the Watson Machine Learning credentials access the IBM Cloud Dashboad by selecting the *Hambuger Menu* in the upper left corner and click `Dashboard`.
 
-* In a different browser tab go to [https://cloud.ibm.com](https://cloud.ibm.com) and Select the Watson Machine Learning Service from the Resource List.
-
-![Select Resource List](doc/source/images/select-wml-resource.gif)
+![](doc/source/images/ibm-cloud-menu.png?raw=true)
 
 
-* Click on your Watson Machine Learning instance under `Services`, click on `Service credentials` and then on `View credentials` to see the credentials.
+2. Back at the IBM Cloud Dashboard, you will be able to see all the services created during this lab.  Click on the `Watson Machine Learning Service`. 
 
-  ![](https://raw.githubusercontent.com/IBM/pattern-images/master/machine-learning/ML-service-credentials.png)
+**Note:** Your service name will vary
+ 
+![](doc/source/images/ibm-cloud-dashboard.png?raw=true)
+
+3. From within the Watson Machine Learning Service details, select `Service Credentials` from the left menu.  Click on `View Credentials` and copy the credentials for the Watson Machine Learning Service.
+
+![](doc/source/images/wml-save-credentials.png?raw=true)
 
 * Save the username, password and instance_id to a text file on your machine. You’ll need this information later in your Jupyter notebook.
 
@@ -228,7 +234,7 @@ Before diving into the training of a machine learning model it's important to un
  #### Data Refinery Data Profile
  ![](doc/source/images/data-refinery-profile.png?raw=true)
  
-3. Don't spend too long exploring data during this lab, there's still a lot more to do!
+Don't spend too long exploring data during this lab, there's still a lot more to do!
 
 
 ## 7. Train a Machine Learning Model
@@ -271,8 +277,7 @@ Before diving into the training of a machine learning model it's important to un
   Do **not** continue to the next cell until the code is finished running.
 
 
-
-![](doc/source/images/restart-app.png)
+**Note:** Your model will have different results and accuracy due to the randomness of spliting up the training and evaluation data.
 
 ## 8. Deploy the saved predictive model as a web service
 
@@ -285,45 +290,95 @@ For Step 6.3, add the `scoring_url` to the cell.
 
 **Deploy the saved predictive model as a scoring service using the web UI**
 
-* In Watson Studio](https://dataplatform.cloud.ibm.com/) go to you project, under `Assets` -> `Models` and click on the model you've created: `Heart Failure Prediction Model`.
+Although training is a critical step in the machine learning process, the model still needs to be packaged, fronted with an API, and deployed as a web service. Watson Machine Learning streamlines deployment of machine learning models into production.
 
-* Go to the `Deployments` tab and `+ Add Deployment`.
+1. Starting from the *Watson ML Demo* project view in Watson Studio, an additional asset has been added to the project. The newly trained and saved *Heart Failure Prediction Model* is now visible.
 
-* Give your Deployment a name, click `Create`, and it should show up with `STATUS` of `DEPLOY_SUCCESS`.
+![](doc/source/images/project-view.png?raw=true)
 
-* Restart the Node.js Web App. For this, return to your IBM Cloud Dashboard, choose your application, and select restart from the `More action` three vertical dots
+2. Select the `Heart Failure Prediction Model` asset from the project view, then select `Deployments` from the model view, and finally select `Add Deployment`. 
 
+![](doc/source/images/model-view.png?raw=true)
+
+3. Name the deployment *Heart Failure Prediction Model Deployment* of the trained machine learning model, for packaging, and fronting with an API, and click `Save`.
+
+![](doc/source/images/model-deploy.png?raw=true)
+
+4. The model is quickly packaged and deployed. Upon completion you will have a new deployment of the trained machine learning model; every trained model can have many deployments.
+
+![](doc/source/images/model-deploy-success.png?raw=true)
+
+5. Double click on the deployed *Heart Failure Prediction Model Deployment* to see details of the deployed model in the `Overview` tab.  In addition to the details there are two additional tabs, one `Implementation`, and another `Test`.  The `Implementation` tab provides you with sample code for invoking the API from `cURL`, `Python`, `Java`, `JavaScript`, or `Scala`. 
+
+#### Model deployment details
+![](doc/source/images/model-deploy-details.png?raw=true)
+
+#### Model API implementation details
+![](doc/source/images/model-deploy-implementation.png?raw=true)
+
+#### Sample test invoking deployed Model
+![](doc/source/images/model-deploy-test.png?raw=true)
+
+**Note:** Watson Machine Learning credentials are needed for invoking APIs, use the credentials obtained above in [Step 5](#5-save-credentials-for-watson-machine-learning-service)
 
 ## 9. Deploy a Node.js test application in Cloud Foundry Runtime
 
-Use Ctrl-click on the Deploy to `IBM Cloud` button below to open the deployment process in a separate tab.
+Until this point in the lab, we've been working as a data scientist and data engineer, gathering data, exploring data, building models, and evaluating models. In this section of the lab we deploy an existing Node.js application that has been developed to call a Machine Learning Model deployed as `Heart Failure Prediction Model Deployment` without having to explicitly specify the Watson Machine Learning credentials in the application.
 
-  [![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/predictive-model-on-watson-ml)
+1. Click on the `IBM Cloud` button below to open create a new DevOps toolchain, that is configured to download the existing Node.js application from this repo, package it, and deploy it as a new Node.js Cloud Foundry Application in IBM Cloud.
 
-> Note:  Make sure to deploy the application to the same region and space as where the *Apache Spark* and *Cloud Object Storage* services were created when you signed up for IBM Watson Studio. Please take note of this space as later in this lab the Watson Machine Learning service needs to be deployed into the same space.
+  [![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/justinmccoy/lab-watson-automatic-model-builder
+)
 
-* Click on `Deploy` to deploy the application.
+**Note:**  Make sure to deploy the application to the same region and space as where the *Watson Machine Learning* service was created.
 
-* A Toolchain and Delivery Pipeline will be created for you to pull the app out of Github and deploy it in to IBM Cloud. Click on the Delivery Pipeline tile to see the status of the deployment. Wait for the **Deploy Stage** to complete successfully.
+2. Create a short, unique name for the toolchain; this will also be the hostname of your app. Next click on `Create` to create a new IBM Cloud API Key, and finally click on `Deploy` to deploy the application.
+
+  ![](doc/source/images/pipeline.png?raw=true)
+  
+**Note:** It may take a minute for the remaining fields to automatically fill in after creating the IBM Cloud API Key.
+
+3. A Toolchain and Delivery Pipeline will be created for you to pull the app out of Github and deploy it in to IBM Cloud. Click on the `Delivery Pipeline` tile to see the status of the deployment.
+
+  ![](doc/source/images/toolchain.png?raw=true)
+
+4. Wait for the **Deploy Stage** to complete; should take less then 5 minutes. The first time won't be successful. We will configure credentials in the next steps.
+
+  ![](doc/source/images/deploy-stage.png?raw=true)
+
+5. Click on the *Hamburger Menu* and return to the IBM Cloud Dashboard, and double click on the newly deployed `Cloud Foundry Application`
+
+  
+  ![](doc/source/images/ibm-cloud-menu.png?raw=true)
+  ~
+  Select `Dashboard`
+  
+  ![](doc/source/images/open-cf-app.png?raw=true)
+  
+6. For our newly deployed Node.js app to communicate with the Watson Machine Learning Service without having to explicitly set credentials, a new connection between the app and service needs to be created. From within the Cloud Foundry App View select `Connections` and then `Create Connection`.
+
+  ![](doc/source/images/cf-app-view.png?raw=true)
+
+7. Select the `Watson Machine Learning Service`, and click `Connect`. Answer `Restage` to the prompt. Restaging the Node.js app, will ensure the app has access to the Watson Machine Learning credentials. 
+
+![](doc/source/images/cf-app-connect.png?raw=true)
+
+Click `Restage`
+![](doc/source/images/cf-app-restage.png?raw=true)
+
+8. With the app restaged, and the model deployed go ahead and visit the App URL and test your deployed machine learning model from a Node.js web app.
+
+![](doc/source/images/cf-app-url.png?raw=true)
+
+#### Example Node.js App
+![](doc/source/images/cf-app-preview.png?raw=true)
 
 
-**Sample Output**
+9. Run the app again with the following parameters.
 
-* In the dashboard, Click on the application name, then choose `Visit App URL` from the `Overview` page to open the application in a separate tab.
+![Score](doc/source/images/Picture33.png)
 
-![](doc/source/images/open-app.png?raw=true)
-
-* When the application appears click on `Score now` to test the scoring model with the default values.
-
-* Verify that the model predicts that there is a risk of heart failure for the patient with these medical characteristics.
-
-![](doc/source/images/failure-yes.png?raw=true)
-
-* `Click Close`. Run the app again with the following parameters.
-
-![Score](doc/source/images/failure-no-params.png)
-
-* Verify that the model predicts that there is not a risk of heart failure for the patient with these medical characteristics.
+10. Verify that the model predicts that there is not a risk of heart failure for the patient with these medical characteristics.
 
 ![](doc/source/images/failure-no.png?raw=true)
 
