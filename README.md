@@ -49,24 +49,16 @@ TBD
 3. [Create a project in Watson Studio and upload training data](#3-create-a-project-in-watson-studio-and-upload-training-data)
 4. [Create an instance of the Watson Machine Learning Service and associate it to project](#4-create-an-instance-of-the-watson-machine-learning-service-and-associate-it-to-project)
 5. [Save credentials for Watson Machine Learning Service](#5-save-credentials-for-watson-machine-learning-service)
-5. [Explore the Data](#5-explore-the-data)
-6. [Train a Machine Learning Model](#6-train-a-machine-learning-model)
-
-
-2. [Create an instance of the Watson Machine Learning Service](#2-create-an-instance-of-the-watson-machine-learning-service)
-1. [Create a project in IBM Watson Studio and bind it to your Watson Machine Learning service instance](#3-create-a-project-in-ibm-watson-studio-and-bind-it-to-your-watson-machine-learning-service-instance)
-1. [Save the credentials for your Watson Machine Learning Service](#4-save-the-credentials-for-your-watson-machine-learning-service)
-1. [Create a notebook in IBM Watson Studio](#5-create-a-notebook-in-ibm-watson-studio)
-1. [Run the notebook in IBM Watson Studio](#6-run-the-notebook-in-ibm-watson-studio)
-1. [Deploy the saved predictive model as a scoring service using the web ui](#7-deploy-the-saved-predictive-model-as-a-scoring-service-using-the-web-ui)
-1. [Deploy the saved predictive model using APIs](#8-deploy-the-saved-predictive-model-using-apis)
-8. [Deploy a Node.js test application in Cloud Foundry Runtime](#8-deploy-a-nodejs-test-application-in-cloud-foundry-runtime)
+6. [Explore the Data](#6-explore-the-data)
+7. [Train a Machine Learning Model](#7-train-a-machine-learning-model)
+8. [Deploy the saved predictive model as a web service](#8-deploy-the-saved-predictive-model-as-a-web-service)
+9. [Deploy a Node.js test application in Cloud Foundry Runtime](#9-deploy-a-nodejs-test-application-in-cloud-foundry-runtime)
 
 ## Prerequisites
 
 * An [IBM Cloud Account](https://cloud.ibm.com)
 
-* An account on [IBM Watson Studio](https://dataplatform.cloud.ibm.com/).
+* An account on [IBM Watson Studio](https://dataplatform.cloud.ibm.com/)
 
 
 
@@ -205,6 +197,7 @@ Machine Learning is a service on IBM Cloud with features for training and deploy
 The Watson Machine Learning service is now listed as one of your `Associated Services`.
 
 ## 5. Save credentials for Watson Machine Learning Service
+# UPDATE SECTION AND IMAGES
 To access the Watson Machine Learning service from SDKs and within Jupyter Notebooks the credentials are necessary.  Copy down the credentials from the newly created service for use in Python later in the lab.
 
 
@@ -238,76 +231,20 @@ Before diving into the training of a machine learning model it's important to un
 3. Don't spend too long exploring data during this lab, there's still a lot more to do!
 
 
-## 6. [Train a Machine Learning Model]
+## 7. Train a Machine Learning Model
 
-
-
-
-----
-
-
-### 3. Create a project in IBM Watson Studio and bind it to your Watson Machine Learning service instance
-
-* Sign up for IBM's [Watson Studio](https://dataplatform.cloud.ibm.com/).
-* Create a new project by clicking `+ New project` and choosing `Data Science`:
-
-![](https://github.com/IBM/pattern-utils/tree/master/watson-studio/CreateDataScienceProject.png)
-
-> Note: By creating a project in Watson Studio a free tier `Object Storage` service will be created in your IBM Cloud account. Take note of your service names as you will need to select them in the following steps.
-
-> Note: When creating your Object Storage service, select the `Free` storage type in order to avoid having to pay an upgrade fee.
-
-> Note: Services created must be in the same region, and space, as your Watson Studio service.
-
-* Enter a name for the project name and click `Create`.
-
-* From within the new project `Overview` panel, click `Add to project` on the top right, selecting `Data asset`.
-
-  ![](https://raw.githubusercontent.com/IBM/pattern-images/master/watson-studio/watson-studio-add-data-asset.png)
-
-  A panel on the right of the screen appears, select `load` and click on `Browse` to upload the data file you'll use to create a predictive model.
-
-* On your machine, browse to the location of the file **patientdataV6.csv** in this repository in the **data/** directory. Select the file and click on Open (or the equivalent action for your operating system).
-
-* Once successfully uploaded, the file should appear in the `Data Assets` section.
-
-  ![](https://raw.githubusercontent.com/IBM/pattern-images/master/watson-studio/data-assets.png)
-
-* Click on the `Services` pull-down at the top of the page, click on `Watson services` and click `+ Add service':
-
-  ![](https://github.com/IBM/pattern-utils/blob/master/watson-studio/StudioWatsonServicesAdd.png)
-
-* Choose your existing Machine Learning instance and click on `Select`.
-
-  ![](https://raw.githubusercontent.com/IBM/pattern-images/master/watson-studio/watson-studio-add-existing-ML.png)
-
-* The Watson Machine Learning service is now listed as one of your `Associated Services`.
-
-* Click on the `Settings` tab for the project, scroll down to `Associated services` and click `+ Add service` ->  `Spark`.
-
-* Either choose and `Existing` Spark service, or create a `New` one
-
-  ![](https://raw.githubusercontent.com/IBM/pattern-images/master/watson-studio/add_existing_spark_service.png)
-
-  ![](https://raw.githubusercontent.com/IBM/pattern-images/master/watson-studio/add_new_spark_service.png)
-
-* Leave the browser tab open for later.
-
-
-
-### 5. Create a notebook in IBM Watson Studio
 
 * In [Watson Studio](https://dataplatform.cloud.ibm.com/) using the project you've created, click on `+ Add to project` -> `Notebook` OR in the `Assets` tab under `Notebooks` choose `+ New notebook` to create a notebook.
 * Select the `From URL` tab.
-* Enter a name for the notebook.
-* Optionally, enter a description for the notebook.
-* Under `Notebook URL` provide the following url: [https://github.com/IBM/predictive-model-on-watson-ml/blob/master/notebooks/predictiveModel.ipynb](https://github.com/IBM/predictive-model-on-watson-ml/blob/master/notebooks/predictiveModel.ipynb)
+* Enter a name 'Predict Heartrate Failure' for the notebook.
+* Under `Notebook URL` provide the following url: [https://github.com/justinmccoy/lab-watson-studio-machine-learning/blob/master/notebooks/predictiveModel.ipynb](https://github.com/justinmccoy/lab-watson-studio-machine-learning/blob/master/notebooks/predictiveModel.ipynb)
 * Select the Spark runtime with Python 3.5 .
 * Click the `Create` button.
 
+## UPDATE THIS PHOTO - Using GIPHY
   ![](doc/source/images/create-spark-notebook.png)
 
-### 6. Run the notebook in IBM Watson Studio
+
 
 * Place your cursor in the first code block in the notebook.
 
@@ -334,7 +271,19 @@ Before diving into the training of a machine learning model it's important to un
   Do **not** continue to the next cell until the code is finished running.
 
 
-### 7. Deploy the saved predictive model as a scoring service using the web UI
+
+![](doc/source/images/restart-app.png)
+
+## 8. Deploy the saved predictive model as a web service
+
+**Deploy the model as an API web service using the Watson Machine Learning SDK**
+
+* To deploy the model using the APIs instead of using the Web UI, at Step 6.1, add the `instance_id` from yout Watson Machine Learning Service credentials.
+During Step 6.2, after running the second cell, get the `model_id` and put it in the cell that follows.
+Put the `deployment_id` in the cell under `Montitor the status of deployment`.
+For Step 6.3, add the `scoring_url` to the cell.
+
+**Deploy the saved predictive model as a scoring service using the web UI**
 
 * In Watson Studio](https://dataplatform.cloud.ibm.com/) go to you project, under `Assets` -> `Models` and click on the model you've created: `Heart Failure Prediction Model`.
 
@@ -344,16 +293,21 @@ Before diving into the training of a machine learning model it's important to un
 
 * Restart the Node.js Web App. For this, return to your IBM Cloud Dashboard, choose your application, and select restart from the `More action` three vertical dots
 
-![](doc/source/images/restart-app.png)
 
-### 8. Deploy the saved predictive model using APIs
+## 9. Deploy a Node.js test application in Cloud Foundry Runtime
 
-* To deploy the model using the APIs instead of using the Web UI, at Step 6.1, add the `instance_id` from yout Watson Machine Learning Service credentials.
-During Step 6.2, after running the second cell, get the `model_id` and put it in the cell that follows.
-Put the `deployment_id` in the cell under `Montitor the status of deployment`.
-For Step 6.3, add the `scoring_url` to the cell.
+Use Ctrl-click on the Deploy to `IBM Cloud` button below to open the deployment process in a separate tab.
 
-# Sample Output
+  [![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/predictive-model-on-watson-ml)
+
+> Note:  Make sure to deploy the application to the same region and space as where the *Apache Spark* and *Cloud Object Storage* services were created when you signed up for IBM Watson Studio. Please take note of this space as later in this lab the Watson Machine Learning service needs to be deployed into the same space.
+
+* Click on `Deploy` to deploy the application.
+
+* A Toolchain and Delivery Pipeline will be created for you to pull the app out of Github and deploy it in to IBM Cloud. Click on the Delivery Pipeline tile to see the status of the deployment. Wait for the **Deploy Stage** to complete successfully.
+
+
+**Sample Output**
 
 * In the dashboard, Click on the application name, then choose `Visit App URL` from the `Overview` page to open the application in a separate tab.
 
@@ -373,17 +327,6 @@ For Step 6.3, add the `scoring_url` to the cell.
 
 ![](doc/source/images/failure-no.png?raw=true)
 
-### 8. Deploy a Node.js test application in Cloud Foundry Runtime
-
-Use Ctrl-click on the Deploy to `IBM Cloud` button below to open the deployment process in a separate tab.
-
-  [![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/predictive-model-on-watson-ml)
-
-> Note:  Make sure to deploy the application to the same region and space as where the *Apache Spark* and *Cloud Object Storage* services were created when you signed up for IBM Watson Studio. Please take note of this space as later in this lab the Watson Machine Learning service needs to be deployed into the same space.
-
-* Click on `Deploy` to deploy the application.
-
-* A Toolchain and Delivery Pipeline will be created for you to pull the app out of Github and deploy it in to IBM Cloud. Click on the Delivery Pipeline tile to see the status of the deployment. Wait for the **Deploy Stage** to complete successfully.
 
 # Learn more
 
