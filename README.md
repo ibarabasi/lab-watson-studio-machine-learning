@@ -43,14 +43,23 @@ TBD
 # Steps
 
 
-1. [Deploy the testing application](#1-deploy-the-testing-application)
-1. [Create an instance of the Watson Machine Learning Service](#2-create-an-instance-of-the-watson-machine-learning-service)
+
+1. [Create an instance of the Watson Studio Service](#1-create-an-instance-of-the-watson-studio-service)
+2. [Welcome to Watson Studio](#2-welcome-to-watson-studio)
+3. [Create a project in Watson Studio and upload training data](#3-create-a-project-in-watson-studio-and-upload-training-data)
+4. [Create an instance of the Watson Machine Learning Service and associate it to project](#4-create-an-instance-of-the-watson-machine-learning-service-and-associate-it-to-project)
+5. [Explore the Data](#5-explore-the-data)
+6. [Train a Machine Learning Model](#6-train-a-machine-learning-model)
+
+
+2. [Create an instance of the Watson Machine Learning Service](#2-create-an-instance-of-the-watson-machine-learning-service)
 1. [Create a project in IBM Watson Studio and bind it to your Watson Machine Learning service instance](#3-create-a-project-in-ibm-watson-studio-and-bind-it-to-your-watson-machine-learning-service-instance)
 1. [Save the credentials for your Watson Machine Learning Service](#4-save-the-credentials-for-your-watson-machine-learning-service)
 1. [Create a notebook in IBM Watson Studio](#5-create-a-notebook-in-ibm-watson-studio)
 1. [Run the notebook in IBM Watson Studio](#6-run-the-notebook-in-ibm-watson-studio)
 1. [Deploy the saved predictive model as a scoring service using the web ui](#7-deploy-the-saved-predictive-model-as-a-scoring-service-using-the-web-ui)
 1. [Deploy the saved predictive model using APIs](#8-deploy-the-saved-predictive-model-using-apis)
+8. [Deploy a Node.js test application in Cloud Foundry Runtime](#8-deploy-a-nodejs-test-application-in-cloud-foundry-runtime)
 
 ## Prerequisites
 
@@ -62,17 +71,167 @@ TBD
 
 As of 12/14/2018, the Machine Learning service on IBM Cloud is only available in the Dallas, London, Frankfurt, or Tokyo regions.
 
-### 1. Deploy the testing application
 
-Use Ctrl-click on the Deploy to `IBM Cloud` button below to open the deployment process in a separate tab.
+## 1. Create an instance of the Watson Studio Service
 
-  [![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/predictive-model-on-watson-ml)
+Watson Studio is your IDE for Machine Learning and Data Science, combining opensource tools, and libraries into a unified Cloud based platform for discovering and sharing insights. For this lab we're using a Jupyter Notebook and Python for the data preparation, training, and evaluation steps of machine learning. 
 
-> Note:  Make sure to deploy the application to the same region and space as where the *Apache Spark* and *Cloud Object Storage* services were created when you signed up for IBM Watson Studio. Please take note of this space as later in this lab the Watson Machine Learning service needs to be deployed into the same space.
+1. In your browser go to the [IBM Cloud Dashboard](https://console.bluemix.net/dashboard/apps) and click `Catalog`. 
 
-* Click on `Deploy` to deploy the application.
+2. In the navigation menu at the left, select `AI` and then select `Watson Studio`.
 
-* A Toolchain and Delivery Pipeline will be created for you to pull the app out of Github and deploy it in to IBM Cloud. Click on the Delivery Pipeline tile to see the status of the deployment. Wait for the **Deploy Stage** to complete successfully.
+  ![](doc/source/images/watson-studio-service.png?raw=true)
+
+3. Verify this service is being created in the `Dallas region`, and you've selected the `lite/free` pricing plan.
+
+Note the `lite/free` plan only allows you to add a single user to your project, and is limited in the compute capacity hours.  More details on limits and how to monitor usage is available in the [documentation](https://dataplatform.cloud.ibm.com/docs/content/admin/monitor-resources.html?context=analytics&linkInPage=true).
+
+  ![](doc/source/images/watson-studio-create.png?raw=true)
+
+4. Click `Create`
+
+5. Launch your newly created Watson Studio Environment by clicking `Get Started`
+
+  ![](doc/source/images/launch-watson-studio.png?raw=true)
+ 
+ 
+## 2. Welcome to Watson Studio
+
+IBM Watson Studio is a collaborative environment with AI tools that you and your team can use to collect and prepare training data, and to design, train, and deploy machine learning models.
+
+Ranging from graphical tools you can use to build a model in minutes, to tools that automate running thousands of experiment training runs and hyperparameter optimization, Watson Studio AI tools support popular frameworks, including: TensorFlow, Caffe, PyTorch, and Keras.
+
+You can think of Watson Studio AI tools in four categories:
+
+* Visual recognition
+* Natural language classification
+* Machine learning
+* Deep learning
+
+Documentation is available [here](https://dataplatform.cloud.ibm.com/docs/content/getting-started/welcome-main.html?context=analytics)
+
+#### Overview Landing Page
+
+  ![](doc/source/images/watson-studio-overview.png?raw=true)
+  
+   1. **Projects** - Organize resources used when working with data; here you see your most recently updated projects
+   2. **Tools** - Quick links to commonly used Data Science and ML Tools including RStudio, Data Refinery, Jupyter Notebooks, or a Visual Neural Network Model Builder
+   3. **Catalog** - Create and manage data policies for managed or connected data resources
+   4. **Community** - Links to the best content found by IBM Data Scientists, including example notebooks, datasets, and tutorials
+   5. **Services** - Create Watson, data, and compute services and connections. Such as Watson Visual Recognition, or Apache Spark 
+   6. **Manage** - Account wide configuration, including Anaconda environments, security, catalogs, billing
+   7. **Hamburger Menu** - Access to IBM Watson Studio Tools, and IBM Cloud's Dashboard and Tools
+   8. **IBM Studio Menu** - Quick link to the Watson Studio welcome page
+   9. **Account Profile and Settings** - Personal account settings
+
+#### Overview Project Page
+
+  ![](doc/source/images/watson-studio-project-overview.png?raw=true)
+  
+  1. **Overview** - The page you're seeing now, shows who is collaborating on the projects, and number of assets associated
+  2. **Assets** - Links to each asset found within the project, broken down into categories
+  3. **Environments** - Track capacity units used, and manage Anaconda environments. 
+  4. **Access Control** - Manage collaborators for project
+  5. **Readme** - Markdown documentation for projecct
+  6. **Add to Project** - Create, connect, or import new assets to project
+
+## 3. Create a project in Watson Studio and upload training data
+A project is how you organize your resources to achieve a particular goal. Your project resources can include data, collaborators, and analytic assets like notebooks and models. Projects depends on a connection to object storage to store assets. Each project has a separate bucket to hold the project's assets. 
+
+
+1. From the Watson Studio dashboard getting started display, click on `Create Project`, or `New Project` 
+
+  ![](doc/source/images/new-project.png?raw=true)
+
+2. Select project type. There are many different tools built into Watson Studio and multiple views are built to simplify the features shown to users.  Select the `Standard Project` where all features are available, and click `Create Project`.
+
+  ![](doc/source/images/standard-project.png?raw=true)
+  
+3. Watson Studio projects depend on Object Storage for storing project assets such as notebooks, models, and data. These project assets are created in a project specific bucket within object storage.  If you don't already have Object Storage defined you can create a new instance of the service directly from the New Project dialog. Under `Define storage` select `Add`. In the Cloud Object Storage service creation menu, accept the default options, select `Lite` and then `Create`.  
+
+**Note:**  You cannot define two Object Storage services under the free tier of IBM Cloud; if you already have object storage defined, choose `Existing` as highlighted in the screenshot below.
+
+  ![](doc/source/images/create-services.png?raw=true)
+  
+  
+  ![](doc/source/images/create-services-cos.png?raw=true)
+  
+  
+4. With object storage created, or existing object storage linked, click `Refresh` allowing Watson Studio to discover the newly created service. Enter _Watson ML Demo_ as the project name and click `Create`.
+
+5. From within the new project's `Overview` panel, click `Add to project` on the top right, selecting `Data asset`.
+
+  ![](doc/source/images/add-to-project.png?raw=true)
+
+  A panel on the right of the screen appears, select `Load` and click on `Browse` to upload the data file you'll use to create a predictive model.
+
+  ![](doc/source/images/add-data-asset.png?raw=true)
+
+6. On your machine, browse to the location of the file [**patientdataV6.csv**](https://raw.githubusercontent.com/justinmccoy/lab-watson-studio-machine-learning/master/data/patientdataV6.csv) in this repository in the **data/** directory. Select the file and click on Open (or the equivalent action for your operating system).
+
+Once successfully uploaded, the file should appear in the `Data Assets` section of `Assets`.
+
+  ![](doc/source/images/data-assets.png?raw=true)
+
+Congratulations, you've created a new Machine Learning Project and uploaded training data.
+
+## 4. Create an instance of the Watson Machine Learning Service and associate it to project
+
+Machine Learning is a service on IBM Cloud with features for training and deploying machine learning models and neural networks:
+
+* Interfaces for building, training, and deploying models: [Python client library](https://wml-api-pyclient.mybluemix.net/), [Command line interface](https://dataplatform.cloud.ibm.com/docs/content/analyze-data/ml_dlaas_environment.html), [REST API](https://watson-ml-api.mybluemix.net/)
+* Deployment infrastructure for hosting your trained models
+* Hyperparameter optimization for training complex neural networks
+* Distributed deep learning for distributing training runs across multiple servers
+* GPUs for faster training
+
+
+1. Click on `Settings` for the project, then `Add Service` under `Associate Services` and finally, select `Watson` to add a Watson service to the project.  Note there are several types of servcies we can assoicate with a project, including Dashboards, and connections to existing Apache Spark services.
+
+  ![](doc/source/images/settings.png?raw=true)
+
+2. Select `Machine Learning` from the list of available Watson Services.
+
+  ![](doc/source/images/add-associated-service.png?raw=true)
+
+**Note:** If you have an existing Machine Learning service select your `Existing` service instead of creating a new one.
+
+  ![](doc/source/images/choose-ml-service.png?raw=true)
+  
+3. Verify this service is being created in the `Dallas region`.
+
+  ![](doc/source/images/watson-ml-create.png?raw=true)
+
+4. Click `Create`.
+
+The Watson Machine Learning service is now listed as one of your `Associated Services`.
+
+## 5. Explore the Data
+Before diving into the training of a machine learning model it's important to understand how your data is structured, what fields are available, if there is any missing data, and potentially any data that might not be useful that could be removed.  A quick way to preview data is with Data Refinery, a visual data exploration tool built into Watson Studio.
+
+1. From the *Watson ML Demo* project page in Watson Studio, select the `Assets` tab then the `Refine` action to load the patient data into Data Refinery.
+
+ ![](doc/source/images/load-data-refinery.png?raw=true)
+
+2. Understand the quality and distribution of your data using data profiler, and dozens of built-in charts, graphs, and statistics. Automatically detect data types and column classifications. Explore the data, selecting the `Profile` tab to better understand the values for the columns or features used later when building the machine learning models.
+
+ #### Data Refinery Overview
+ ![](doc/source/images/data-refinery-overview.png?raw=true)
+ 
+ #### Data Refinery Data Profile
+ ![](doc/source/images/data-refinery-profile.png?raw=true)
+ 
+3. Don't spend too long exploring data during this lab, there's still a lot more to do!
+
+
+## 6. [Train a Machine Learning Model]
+
+
+
+
+----
+
+
 
 ### 2. Create an instance of the Watson Machine Learning Service
 
@@ -222,6 +381,18 @@ For Step 6.3, add the `scoring_url` to the cell.
 * Verify that the model predicts that there is not a risk of heart failure for the patient with these medical characteristics.
 
 ![](doc/source/images/failure-no.png?raw=true)
+
+### 8. Deploy a Node.js test application in Cloud Foundry Runtime
+
+Use Ctrl-click on the Deploy to `IBM Cloud` button below to open the deployment process in a separate tab.
+
+  [![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/predictive-model-on-watson-ml)
+
+> Note:  Make sure to deploy the application to the same region and space as where the *Apache Spark* and *Cloud Object Storage* services were created when you signed up for IBM Watson Studio. Please take note of this space as later in this lab the Watson Machine Learning service needs to be deployed into the same space.
+
+* Click on `Deploy` to deploy the application.
+
+* A Toolchain and Delivery Pipeline will be created for you to pull the app out of Github and deploy it in to IBM Cloud. Click on the Delivery Pipeline tile to see the status of the deployment. Wait for the **Deploy Stage** to complete successfully.
 
 # Learn more
 
