@@ -48,6 +48,7 @@ TBD
 2. [Welcome to Watson Studio](#2-welcome-to-watson-studio)
 3. [Create a project in Watson Studio and upload training data](#3-create-a-project-in-watson-studio-and-upload-training-data)
 4. [Create an instance of the Watson Machine Learning Service and associate it to project](#4-create-an-instance-of-the-watson-machine-learning-service-and-associate-it-to-project)
+5. [Save credentials for Watson Machine Learning Service](#5-save-credentials-for-watson-machine-learning-service)
 5. [Explore the Data](#5-explore-the-data)
 6. [Train a Machine Learning Model](#6-train-a-machine-learning-model)
 
@@ -67,16 +68,13 @@ TBD
 
 * An account on [IBM Watson Studio](https://dataplatform.cloud.ibm.com/).
 
-* A space in IBM Cloud Dallas, London, Frankfurt, or Tokyo regions.
-
-As of 12/14/2018, the Machine Learning service on IBM Cloud is only available in the Dallas, London, Frankfurt, or Tokyo regions.
 
 
 ## 1. Create an instance of the Watson Studio Service
 
 Watson Studio is your IDE for Machine Learning and Data Science, combining opensource tools, and libraries into a unified Cloud based platform for discovering and sharing insights. For this lab we're using a Jupyter Notebook and Python for the data preparation, training, and evaluation steps of machine learning. 
 
-1. In your browser go to the [IBM Cloud Dashboard](https://console.bluemix.net/dashboard/apps) and click `Catalog`. 
+1. In your browser go to the [IBM Cloud Dashboard](https://cloud.ibm.com/) and click `Catalog`. 
 
 2. In the navigation menu at the left, select `AI` and then select `Watson Studio`.
 
@@ -206,7 +204,23 @@ Machine Learning is a service on IBM Cloud with features for training and deploy
 
 The Watson Machine Learning service is now listed as one of your `Associated Services`.
 
-## 5. Explore the Data
+## 5. Save credentials for Watson Machine Learning Service
+To access the Watson Machine Learning service from SDKs and within Jupyter Notebooks the credentials are necessary.  Copy down the credentials from the newly created service for use in Python later in the lab.
+
+
+* In a different browser tab go to [https://cloud.ibm.com](https://cloud.ibm.com) and Select the Watson Machine Learning Service from the Resource List.
+
+![Select Resource List](doc/source/images/select-wml-resource.gif)
+
+
+* Click on your Watson Machine Learning instance under `Services`, click on `Service credentials` and then on `View credentials` to see the credentials.
+
+  ![](https://raw.githubusercontent.com/IBM/pattern-images/master/machine-learning/ML-service-credentials.png)
+
+* Save the username, password and instance_id to a text file on your machine. You’ll need this information later in your Jupyter notebook.
+
+
+## 6. Explore the Data
 Before diving into the training of a machine learning model it's important to understand how your data is structured, what fields are available, if there is any missing data, and potentially any data that might not be useful that could be removed.  A quick way to preview data is with Data Refinery, a visual data exploration tool built into Watson Studio.
 
 1. From the *Watson ML Demo* project page in Watson Studio, select the `Assets` tab then the `Refine` action to load the patient data into Data Refinery.
@@ -231,21 +245,6 @@ Before diving into the training of a machine learning model it's important to un
 
 ----
 
-
-
-### 2. Create an instance of the Watson Machine Learning Service
-
-* In your browser go to the [IBM Cloud Dashboard](https://cloud.ibm.com/dashboard/apps) and click `Catalog`.
-
-* Search for `Machine Learning`, Verify this service is being created in the same space as the app in Step 1, and click `Create`.
-
-  !["Create Machine Learning"](https://github.com/IBM/pattern-utils/blob/master/machine-learning/create-machine-learning.png)
-
-* On the Watson ML Dashboard select `Connections` on left menu panel, and `Create Connection`.  Select the application that you deployed earlier in Step 1 of this lab connecting this Watson ML service to the Cloud Foundry application deployed.
-
-  ![](doc/source/images/connect-to.png)
-
-* Click `Connect and restage app` when you’re prompted to restage your application. The app will take a couple of minutes to be back in the `running` state.
 
 ### 3. Create a project in IBM Watson Studio and bind it to your Watson Machine Learning service instance
 
@@ -294,15 +293,7 @@ Before diving into the training of a machine learning model it's important to un
 
 * Leave the browser tab open for later.
 
-### 4. Save the credentials for your Watson Machine Learning Service
 
-* In a different browser tab go to [https://cloud.ibm.com](https://cloud.ibm.com) and log in to the Dashboard.
-
-* Click on your Watson Machine Learning instance under `Services`, click on `Service credentials` and then on `View credentials` to see the credentials.
-
-  ![](https://raw.githubusercontent.com/IBM/pattern-images/master/machine-learning/ML-service-credentials.png)
-
-* Save the username, password and instance_id to a text file on your machine. You’ll need this information later in your Jupyter notebook.
 
 ### 5. Create a notebook in IBM Watson Studio
 
